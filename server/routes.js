@@ -11,7 +11,7 @@ module.exports = function routes(app) {
         res.send(product);
     });
 
-    app.post("/products", async (req, res) => {
+    app.post("/products/create", async (req, res) => {
         const product = await productController.createProduct(req.body);
         res.send(product);
     });

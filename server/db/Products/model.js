@@ -1,6 +1,9 @@
 const Sequelize = require('sequelize');
 
 module.exports = db => db.define('products', {
+    code: {
+        type: Sequelize.INTEGER
+    },
     prov_id: {
         type: Sequelize.INTEGER
     },
@@ -30,6 +33,9 @@ module.exports = db => db.define('products', {
     },
     exp_date: {
         type: Sequelize.STRING
+    },
+    exp_type: {
+        type: Sequelize.ENUM('Дней', 'Месяцев', 'Лет')
     },
     country: {
         type: Sequelize.STRING

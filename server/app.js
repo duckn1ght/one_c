@@ -1,12 +1,15 @@
 const express = require("express");
-const db = require("./db");
-const app = express();
-const routes = require("./routes")(app);
+const cors = require("cors");
 require("dotenv").config();
+const app = express();
 const port = process.env.PORT;
 
-app.get("/", (req, res) => {
-    res.send("hello from simple server :)");
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+
+const db = require("./db");
+const routes = require("./routes")(app);
+
 
 app.listen(port, () => console.log("> Сервер запущен на порте: " + port));

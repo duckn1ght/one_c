@@ -21,8 +21,9 @@ async function getProduct(code) {
         });
         if (!product) {
             console.error("> Продукты не найдены");
-            return [];
+            return false;
         }
+        return product;
     } catch (error) {
         console.error(`> Ошибка получения товара: ${error}`);
     }
@@ -30,17 +31,12 @@ async function getProduct(code) {
 
 async function createProduct(product) {
     try {
-        if (product) {
-            if (getProduct(product.code)) {
-                console.error("> Товар уже создан");
-                return false;
-            }
-            const newProduct = await sqlize.products.create(product);
-            return newProduct;
-        } else {
-            console.error("> Данные о товаре не переданы");
+        if (await getProduct(product.code)) {
+            console.error("> Товар уже создан");
             return false;
         }
+        const newProduct = await sqlize.products.create(product);
+        return newProduct;
     } catch (error) {
         console.error(`> Ошибка создания товара: ${error}`);
         return false;
