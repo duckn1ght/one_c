@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%= title %></title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <h1>Интеграция 1С</h1>
+        <button id="allButton">Вывести все товары из БД</button>
+        <button id="reqButton">Сделать запрос в 1С</button>
+        <ul id="list"></ul>
+    </body>
+    <script>
+        async function allProducts() {
+            const list = document.getElementById("list");
+            list.innerHTML = "";
+            const response = await axios.get("/products");
+            const products = response.data;
+            products.forEach((element) => {
+                const item = document.createElement("li");
+                // console.log(element);
+                item.textContent = JSON.stringify(element, null, 2);
+                list.appendChild(item);
+            });
+        }
+
+        document
+            .getElementById("allButton")
+            .addEventListener("click", allProducts);
+
+        document
+            .getElementById("reqButton")
+            .addEventListener("click", async () => {
+                const productFromOneC = await axios.get("<%-one_c_url%>");
+                const newProduct = {
+                    code: productFromOneC.data.code || null,
+                    name: productFromOneC.data.name || null,
+                    prov_id: productFromOneC.data.prov_id || null,
+                    cat_id: productFromOneC.data.cat_id || null,
+                    sub_cat_id: productFromOneC.data.sub_cat_id || null,
+                    brand_id: productFromOneC.data.brand_id || null,
+                    price: productFromOneC.data.price || null,
+                    description: productFromOneC.data.description || null,
+                    compound: productFromOneC.data.compound || null,
+                    image_path: productFromOneC.data.image_path || null,
+                    exp_date: productFromOneC.data.exp_date || null,
+                    exp_type: productFromOneC.data.exp_type || null,
+                    country: productFromOneC.data.country || null,
+                    unit: productFromOneC.data.unit || null,
+                    capacity: productFromOneC.data.capacity || null,
+                    sale: productFromOneC.data.sale || null,
+                    promo: productFromOneC.data.promo || null,
+                    total_price: productFromOneC.data.total_price || null,
+                };
+                const response = await axios.post(
+                    "/products/create",
+                    newProduct
+                );
+                allProducts();
+                console.log(response.data);
+            });
+    </script>
+</html>
